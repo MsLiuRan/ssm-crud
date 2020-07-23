@@ -29,6 +29,16 @@
       <version>4.3.7.RELEASE</version>
     </dependency>
 
+    <!--spring test 单元测试-->
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>4.3.7.RELEASE</version>
+      <scope>test</scope>
+    </dependency>
+
+
     <!--spring 面向切面编程-->
     <!-- https://mvnrepository.com/artifact/org.springframework/spring-aspects -->
     <dependency>
@@ -73,11 +83,24 @@
       <artifactId>jstl</artifactId>
       <version>1.2</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
+    <!-- https://mvnrepository.com/artifact/taglibs/standard -->
+    <!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl-api -->
+    <dependency>
+      <groupId>javax.servlet.jsp.jstl</groupId>
+      <artifactId>jstl-api</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.glassfish.web/jstl-impl -->
+    <dependency>
+      <groupId>org.glassfish.web</groupId>
+      <artifactId>jstl-impl</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
     <dependency>
       <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -86,6 +109,14 @@
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
+
+    <!--引入PageHelper插件-->
+    <dependency>
+      <groupId>com.github.pagehelper</groupId>
+      <artifactId>pagehelper</artifactId>
+      <version>5.0.0</version>
+    </dependency>
+
     <!--MBG-->
     <!-- https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-core -->
     <dependency>
@@ -93,6 +124,15 @@
       <artifactId>mybatis-generator-core</artifactId>
       <version>1.3.5</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/javax.servlet/jsp-api -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.0</version>
+      <scope>provided</scope>
+    </dependency>
+
 
   </dependencies>
 
