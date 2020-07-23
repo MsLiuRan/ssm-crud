@@ -20,6 +20,12 @@ public class EmployeeService {
     EmployeeMapper employeeMapper;
     //查询所有员工
     public List<Employee> getAll() {
-        return employeeMapper.selectByExampleWithDept(null);
+        List<Employee> list = employeeMapper.selectByExampleWithDept(null);
+        return list;
+    }
+
+
+    public void saveEmp(Employee employee) {
+        employeeMapper.insertSelective(employee);
     }
 }
