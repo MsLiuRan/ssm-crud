@@ -34,12 +34,14 @@
                         <label class="col-sm-2 control-label">empName</label>
                         <div class="col-sm-10">
                             <input type="text" name="empName" class="form-control" id="empName_add_input" placeholder="empName">
+                            <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">email</label>
                         <div class="col-sm-10">
                             <input type="text" name="email" class="form-control" id="email_add_input" placeholder="email@test.com">
+                            <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -257,8 +259,30 @@
             }
         });
     }
+    function validate_add_form() {
+        //1、拿到要校验的数据，使用正则表达式
+        var empName = $("#empName_add_input").val();
+        var regName = /(^[a-zA-Z0-9_-]{6,16}$)|(^[\u2E80-\u9FFF]{2,5})/;
+        if(!regName.test(empName)) {
+            //alert("用户名可以是2-5位中文或者6-16位英文和数字的组合");
+            $("#empName_add_input").parent().
+            return false;
+        }
+        //2、校验邮箱信息
+        var email = $("#email_add_input").val();
+        var regEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+        if(!regEmail.test(email)){
+            alert("邮箱格式不正确");
+            return false;
+        }
+        return true;
+    }
 
     $("#emp_save_btn").click(function () {
+        //先对要提交给服务器的数据进行校验
+        if(!validate_add_form()){
+            return false;
+        }
         //1、模态框中填写的表单数据提交给服务器进行保存
         //2、发送ajax请求保存员工
         //alert($("#empAddModal form").serialize());
