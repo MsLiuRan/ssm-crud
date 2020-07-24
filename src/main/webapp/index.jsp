@@ -215,7 +215,7 @@
 
             var editBtn = $("<button></button>").addClass("btn btn-primary btn-sm edit_btn")
                           .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("编辑");
-            var deleteBtn = $("<button></button>").addClass("btn btn-danger btn-sm")
+            var deleteBtn = $("<button></button>").addClass("btn btn-danger btn-sm delete_btn")
                 .append($("<span></span>").addClass("glyphicon glyphicon-trash")).append("删除");
             var btnTd = $("<td></td>").append(editBtn).append(" ").append(deleteBtn);
             $("<tr></tr>").append(empIdTd)
