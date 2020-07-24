@@ -19,6 +19,60 @@
 </head>
 <body>
 
+<!-- 员工修改的模态框 -->
+<!-- Modal -->
+<div class="modal fade" id="empUpdateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">员工修改</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">empName</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="empName" class="form-control" id="empName_Update_input" placeholder="empName">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">email</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="email" class="form-control" id="email_Update_input" placeholder="email@test.com">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">gender</label>
+                        <div class="col-sm-10">
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" id="gender1_Update_input" value="M" checked="checked"> 男
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" id="gender2_Update_input" value="F"> 女
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">deptName</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="dId" id="dept_Update_select">
+
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="emp_update_btn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 员工添加的模态框 -->
 <!-- Modal -->
 <div class="modal fade" id="empAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -26,7 +80,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">员工添加</h4>
+                <h4 class="modal-title">员工添加</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
@@ -159,7 +213,7 @@
              </button>
              **/
 
-            var editBtn = $("<button></button>").addClass("btn btn-primary btn-sm")
+            var editBtn = $("<button></button>").addClass("btn btn-primary btn-sm edit_btn")
                           .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("编辑");
             var deleteBtn = $("<button></button>").addClass("btn btn-danger btn-sm")
                 .append($("<span></span>").addClass("glyphicon glyphicon-trash")).append("删除");
@@ -233,8 +287,20 @@
         navEle.appendTo("#page_nav_area");
     }
 
+    //清空表单样式及数据
+    function reset_form(ele) {
+        //清除表单数据
+        $(ele)[0].reset();
+        //清空表单样式
+        $(ele).find("*").removeClass("has-success has-error");
+        $(ele).find(".help-block").text("");
+    }
+
     //点击新增按钮弹出模态框
     $("#emp_add_modal_btn").click(function(){
+        //清除表单数据
+        reset_form("#empAddModal form");
+        //$("#empAddModal form")[0].reset();
         //发送ajax请求查询部门信息，显示在下拉列表中
         getDepts();
         //弹出模态框
@@ -245,6 +311,7 @@
 
     //查询部门信息
     function getDepts() {
+        $("#dept_add_select").empty();
         $.ajax({
             url:"${APP_PATH}/depts",
             type:"GET",
@@ -265,24 +332,74 @@
         var regName = /(^[a-zA-Z0-9_-]{6,16}$)|(^[\u2E80-\u9FFF]{2,5})/;
         if(!regName.test(empName)) {
             //alert("用户名可以是2-5位中文或者6-16位英文和数字的组合");
-            $("#empName_add_input").parent().
+            show_validate_msg("#empName_add_input","error","用户名可以是2-5位中文或者6-16位英文和数字的组合");
+            //$("#empName_add_input").parent().addClass("has-error");
+            //$("#empName_add_input").next("span").text("用户名可以是2-5位中文或者6-16位英文和数字的组合");
             return false;
+        } else {
+            show_validate_msg("#empName_add_input","success","");
+            //$("#empName_add_input").parent().addClass("has-success");
+            //$("#empName_add_input").next("span").text("");
         }
         //2、校验邮箱信息
         var email = $("#email_add_input").val();
         var regEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
         if(!regEmail.test(email)){
-            alert("邮箱格式不正确");
+            show_validate_msg("#email_add_input","error","邮箱格式不正确");
+            //$("#email_add_input").parent().addClass("has-error");
+            //$("#email_add_input").next("span").text("邮箱格式不正确");
             return false;
+        } else {
+            show_validate_msg("#email_add_input","success","");
+            //$("#email_add_input").parent().addClass("has-success");
+            //$("#email_add_input").next("span").text("");
         }
         return true;
     }
 
+    function show_validate_msg(ele,status,msg) {
+        //清除当前元素的校验状态
+        $(ele).parent().removeClass("has-success has-error");
+        $(ele).next("span").text("");
+        if ("success" == status) {
+            $(ele).parent().addClass("has-success");
+            $(ele).next("span").text(msg);
+        } else {
+            $(ele).parent().addClass("has-error");
+            $(ele).next("span").text(msg);
+        }
+    }
+
+    //校验用户名是否可用
+    $("#empName_add_input").change(function() {
+        var empName = this.value;
+        //发送ajax请求
+        $.ajax({
+            url:"${APP_PATH}/checkuser",
+            data:"empName=" + empName,
+            type:"POST",
+            success:function (result) {
+                if(result.code == 100) {
+                    show_validate_msg("#empName_add_input","success","");
+                    //给按钮添加自定义属性
+                    $("#emp_save_btn").attr("ajax-va","success");
+                } else {
+                    show_validate_msg("#empName_add_input","error",result.extend.va_msg);
+                    $("#emp_save_btn").attr("ajax-va","error");
+                }
+            }
+        })
+    });
+
     $("#emp_save_btn").click(function () {
         //先对要提交给服务器的数据进行校验
-        if(!validate_add_form()){
-            return false;
-        }
+        // if(!validate_add_form()){
+        //     return false;
+        // }
+        //判断之前的ajax用户名校验是否成功。如果成功。
+        // if ($("#emp_save_btn").attr("ajax-va") == "error") {
+        //     return false;
+        // }
         //1、模态框中填写的表单数据提交给服务器进行保存
         //2、发送ajax请求保存员工
         //alert($("#empAddModal form").serialize());
@@ -291,16 +408,29 @@
             type:"POST",
             data:$("#empAddModal form").serialize(),
             success:function (result) {
+                if(result.code == 100) {
+                    //员工保存成功；
+                    //1、关闭模态框
+                    $("#empAddModal").modal('hide');
+                    //2、来到最后一页，显示刚才保存的数据
+                    //发送ajax请求显示最后一页数据即可
+                    to_page(totalRecord);
+                } else {
+                    if(undefined != result.extend.errorFields.empName) {
+                        //显示名字错误信息
+                        show_validate_msg("#empName_add_input","error",result.extend.errorFields.empName);
+                    }
+                    if(undefined != result.extend.errorFields.email) {
+                        //显示名字错误信息
+                        show_validate_msg("#email_add_input","error",result.extend.errorFields.email);
+                    }
+                }
                 //alert(result.msg);
-                //员工保存成功；
-                //1、关闭模态框
-                $("#empAddModal").modal('hide');
-                //2、来到最后一页，显示刚才保存的数据
-                //发送ajax请求显示最后一页数据即可
-                to_page(totalRecord);
             }
         })
     });
+
+
 </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.pers.service;
 
 import com.pers.bean.Employee;
+import com.pers.bean.EmployeeExample;
 import com.pers.dao.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,5 +28,18 @@ public class EmployeeService {
 
     public void saveEmp(Employee employee) {
         employeeMapper.insertSelective(employee);
+    }
+
+    /**
+     * 检验员工名是否可用
+     * @param empName
+     * @return true：姓名可用 false：不可用
+     */
+    public boolean checkUser(String empName) {
+        EmployeeExample example = new EmployeeExample();
+        EmployeeExample.Criteria criteria = example.createCriteria();
+        criteria.andEmpNameEqualTo(empName);
+        long count = employeeMapper.countByExample(example);
+        return count == 0;
     }
 }
